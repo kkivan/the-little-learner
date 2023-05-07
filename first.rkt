@@ -69,22 +69,24 @@
 
 (revise f 5 (list 1 2 3))
 
-(define (descent)
-  (let ((alpha 0.01))
-    (let ((f (λ (theta)
-               (let ((gs (gradient-of obj theta)))
-                 (list (- (list-ref theta 0) (* alpha (list-ref gs 0)))
-                       (- (list-ref theta 1) (* alpha (list-ref gs 1))))))))
-      (revise f 1000 (list 0.0 0.0)))))
+(define alpha 0.01)
+(define revs 1000)
+
+(define gradient-descent
+  (λ (obj θ)
+    (let ((f (λ (Θ)
+               (map (λ (p g)
+                      (- p (* alpha g)))
+                    Θ
+                    (∇ obj Θ)))))
+      (revise f revs θ))))
+
+(gradient-descent obj (list 0.0 0.0))
 
 
+(declare-hyper smaller)
+(declare-hyper larger)
+smaller
 
-(descent)
-
-
-
-
-
-
-
-
+(with-hypers ((smaller 1 ) (larger 2000))
+  (+ smaller larger))
